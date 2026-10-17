@@ -27,6 +27,7 @@ def discount_rate(sessions: int) -> float:
     else:
         return MULTI_SESSION_DISCOUNT[0]
 
+
 def gear_fee(sessions: int) -> float:
     """Return the gear rental fee after the $40.00 maximum cap."""
     fee = sessions * GEAR_RENTAL_PER_SESSION
@@ -34,4 +35,18 @@ def gear_fee(sessions: int) -> float:
         return GEAR_RENTAL_MAX_FEE
     else:
         return fee
-    
+
+
+def registration_total(
+    level: str, sessions: int, is_member: bool, needs_gear: bool
+) -> float:
+    """Return the final total for one registration"""
+    session_cost = session_rate(level) * sessions
+    discount = session_cost * discount_rate(sessions)
+    total = session_cost - discount
+    if is_member and total >= MEMBER_CREDIT_MIN:
+        total -= MEMBER_CREDIT
+
+    if needs_gear:
+        total += gear_fee(sessions)
+    return round(total, 2)

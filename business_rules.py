@@ -26,3 +26,12 @@ def discount_rate(sessions: int) -> float:
         return MULTI_SESSION_DISCOUNT[1]
     else:
         return MULTI_SESSION_DISCOUNT[0]
+
+def gear_fee(sessions: int) -> float:
+    """Return the gear rental fee after the $40.00 maximum cap."""
+    fee = sessions * GEAR_RENTAL_PER_SESSION
+    if fee > GEAR_RENTAL_MAX_FEE:
+        return GEAR_RENTAL_MAX_FEE
+    else:
+        return fee
+    
